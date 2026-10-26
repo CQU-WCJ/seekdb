@@ -129,8 +129,10 @@ jobs:
           set -euo pipefail
           # build.py/.bazelrc use the repository's default optimized (-O2) build.
           # Disable the separate action cache to avoid duplicate local build storage.
+          # This is a native Linux build; do not discover the removed Android SDK
+          # through the hosted runner's inherited ANDROID_NDK_HOME.
           python3 build.py build -j2 --local_resources=memory=12000 \
-            --host_jvm_args=-Xmx2048m --disk_cache= \
+            --host_jvm_args=-Xmx2048m --disk_cache= --repo_env=ANDROID_NDK_HOME= \
             //src/observer:seekdb 2>&1 | tee ../logs/release-build.log
           test -x build/bin/src/observer/seekdb
           test -x deps/3rd/u01/obclient/bin/obclient
