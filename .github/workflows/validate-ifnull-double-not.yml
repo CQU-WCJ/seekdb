@@ -27,16 +27,16 @@ jobs:
   release-and-mysqltest:
     runs-on: ubuntu-24.04
     timeout-minutes: 330
-    env:
-      RUNNER_ENVIRONMENT: ${{ runner.environment }}
     defaults:
       run:
         shell: bash
     steps:
       - name: Check hosted runner and free disposable tools
+        env:
+          TASK_RUNNER_ENVIRONMENT: ${{ runner.environment }}
         run: |
           set -euo pipefail
-          test "$RUNNER_ENVIRONMENT" = github-hosted
+          test "$TASK_RUNNER_ENVIRONMENT" = github-hosted
           test "$RUNNER_OS" = Linux
           mkdir -p logs
           df -h | tee logs/disk-before.log
